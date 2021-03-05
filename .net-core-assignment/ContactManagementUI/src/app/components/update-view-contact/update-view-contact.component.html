@@ -1,0 +1,69 @@
+<div class="card">
+    <div class="card-header">
+        <span style="font-size: x-large;">Update Contact</span>
+    </div>
+    <div class="card-body">
+        <form [formGroup]="contact" (ngSubmit)="onSubmit()">
+            <div class="form-group" [ngClass]="{ 'has-error': submitted && item.firstName.errors }">
+                <label for="firstName">First Name:</label>
+                <input type="text" formControlName="firstName" class="form-control" placeholder="First Name" />
+                <div *ngIf="submitted && item.firstName.errors" class="invalid-feedback">
+                    <div *ngIf="item.firstName.errors.required">First Name is required</div>
+                </div>
+            </div>
+            <div class="form-group" [ngClass]="{ 'has-error': submitted && item.lastName.errors }">
+                <label for="lastName">Last Name:</label>
+                <input type="text" formControlName="lastName" class="form-control" placeholder="Last Name" />
+                <div *ngIf="submitted && item.lastName.errors" class="invalid-feedback">
+                    <div *ngIf="item.lastName.errors.required">Last Name is required</div>
+                </div>
+            </div>
+            <button pButton label="Add Phone number" (click)="addPhoneNumber()" class="ui-button-success mb-1"></button>
+            <div formArrayName="phoneNumbers">
+                <div class="phoneNumber" *ngFor="let team of item.phoneNumbers.controls;
+                         let phoneNumber = index" [formGroupName]="phoneNumber">
+                    <div class="card">
+                        <div class="card-header">
+                            <span style="font-size: x-large;">Phone {{phoneNumber + 1}}</span>
+                            <button pButton label="Delete" class="ui-button-danger ml-1"
+                                (click)="deletePhoneNumber(phoneNumber)"></button>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="lastName">Type:</label>
+                                <select class="form-control" id="exampleFormControlSelect1" formControlName="type">
+                                    <option value="Personal" selected>Personal</option>
+                                    <option value="Professional">Professional</option>
+                                    <option value='Mobile'>Mobile</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Phone Number(10 Digit):</label>
+                                <input type="text" formControlName="number" class="form-control"
+                                    placeholder="Phone Number" />
+                                <div *ngIf="submitted && phoneNumberFormArray.controls[phoneNumber].get('number').errors"
+                                    class="invalid-feedback">
+                                    <div
+                                        *ngIf="phoneNumberFormArray.controls[phoneNumber].get('number').errors.required">
+                                        Phone
+                                        Number is required</div>
+                                    <div
+                                        *ngIf="phoneNumberFormArray.controls[phoneNumber].get('number').errors.pattern">
+                                        Invalid Phone number</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div *ngIf="submitted && item.phoneNumbers.errors" class="invalid-feedback">
+                <div *ngIf="item.phoneNumbers.errors.required">Atleast one phone number is required</div>
+            </div>
+            <button pButton type="submit" label="Submit" [disabled]='postedData'
+                class="ui-button-success mt-1"></button>
+            <p-progressSpinner *ngIf='postedData' [style]="{width: '40px', height: '35px'}" strokeWidth="8"
+                fill="#EEEEEE" animationDuration=".5s"></p-progressSpinner>
+        </form>
+    </div>
+</div>
